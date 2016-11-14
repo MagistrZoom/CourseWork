@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- * The class {@link Airships} is mapping to table AIRPORTS from DB
+ * The class {@link Airships} is mapping to table AIRSHIP from DB
  * @Author Vladimir Gubarev
  * @Version 0.1
  */
@@ -139,7 +139,7 @@ public class Airships {
             query += "WHERE ";
         }
 
-        query += subquery1 + subquery2 + subquery3 + subquery4;
+        query += subquery1 + subquery2 + subquery3 + subquery4 + subquery5;
 
         Statement statement = m_connection.GetConnection().createStatement();
         ResultSet result = statement.executeQuery(query);

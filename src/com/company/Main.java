@@ -6,9 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /*
-airship         CRUD
 employees ---   RUD
-flight          CRUD
 luggage --      RUD
  */
 
