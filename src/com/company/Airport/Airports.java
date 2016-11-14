@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- * The class Airports is mapping to table AIRPORTS from DB
+ * The class {@link Airports} is mapping to table AIRPORTS from DB
  * @Author Vladimir Gubarev
  * @Version 0.1
  */
@@ -33,19 +33,14 @@ public class Airports {
         }
 
         public Airport(String code, String city) {
-            if (code.isEmpty() || city.isEmpty()) {
-                throw new IllegalArgumentException();
-            }
-
-            m_code = code;
-            m_city = city;
+            this(-1, code, city);
         }
 
         public String GetCode() {
             return m_code;
         }
         public String GetCity() { return m_city; }
-        public Integer GetID() { return m_airport_id; }
+        public Integer GetAircraftID() { return m_airport_id; }
     }
 
     public Airports(OracleConnection connection) {
@@ -92,7 +87,7 @@ public class Airports {
         query += subquery1 + subquery2 + subquery3;
 
         PreparedStatement statement = m_connection.GetConnection().prepareStatement(query);
-        statement.setInt(1, airport.GetID());
+        statement.setInt(1, airport.GetAircraftID());
         statement.setString(2, airport.GetCode());
         statement.setString(3, airport.GetCity());
 

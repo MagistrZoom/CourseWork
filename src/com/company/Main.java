@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /*
-aircrafttypes   CRUD
 airship         CRUD
 employees ---   RUD
 flight          CRUD
@@ -34,14 +33,14 @@ public class Main {
             cities.AddValue("Kemerovo");
 
             ArrayList<Airports.Airport> air = airports.GetAirports(id, codes, cities);
-            air.forEach((a) -> System.out.println(a.GetID() + " " + a.GetCity() + " " + a.GetCode()));
+            air.forEach((a) -> System.out.println(a.GetAircraftID() + " " + a.GetCity() + " " + a.GetCode()));
 
             Airports.Airport airport = new Airports.Airport(31, "IKT", "IZHEVSK2");
             Integer result = airports.UpdateAirports(airport, id, null, null);
             System.out.println(result+ " rows written");
 
             air = airports.GetAirports(id, codes, cities);
-            air.forEach((a) -> System.out.println(a.GetID() + " " + a.GetCity() + " " + a.GetCode()));
+            air.forEach((a) -> System.out.println(a.GetAircraftID() + " " + a.GetCity() + " " + a.GetCode()));
         } catch (ClassNotFoundException e) {
             System.err.println(e.getMessage());
         } catch (SQLException e) {

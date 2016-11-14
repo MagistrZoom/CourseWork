@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- * The class Airports is mapping to table AIRPORTS from DB
+ * The class {@link AircraftTypes} is mapping to table AIRCRAFTTYPES from DB
  * @Author Vladimir Gubarev
  * @Version 0.1
  */
