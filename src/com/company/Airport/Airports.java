@@ -36,8 +36,8 @@ public class Airports {
 
             m_code = code;
             m_city = city;
-            /*TODO: now i should insert new field into table
-             *TODO: and fill m_airport_id with returned value*/
+
+            String query = "";
         }
 
         public String GetCode() {
@@ -115,8 +115,8 @@ public class Airports {
     }
 
     public void DeleteAirports(Predicate<Integer> id,
-                                  Predicate<String> code,
-                                  Predicate<String> city) throws SQLException {
+                               Predicate<String> code,
+                               Predicate<String> city) throws SQLException {
         String query = "DELETE FROM airport ";
         String subquery1 = (id != null)?id.SelectWhereStatement("airport_id", true) + " ":"";
         String subquery2 = (code != null)?code.SelectWhereStatement("code", false) + " ":"";
