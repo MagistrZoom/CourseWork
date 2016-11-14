@@ -32,7 +32,18 @@ public class Owners {
         }
         
         public Owner(Integer owner_id, String shortname, String fullname) {
+            if (shortname.isEmpty() || fullname.isEmpty()) {
+                throw new IllegalArgumentException();
+            }
             this.m_owner_id = owner_id;
+            this.m_shortname = shortname;
+            this.m_fullname = fullname;
+        }
+
+        public Owner(String shortname, String fullname) {
+            if (shortname.isEmpty() || fullname.isEmpty()) {
+                throw new IllegalArgumentException();
+            }
             this.m_shortname = shortname;
             this.m_fullname = fullname;
         }
@@ -42,7 +53,29 @@ public class Owners {
         m_connection = connection;
     }
 
-    public Integer UpdateOwners(Owner Owner,
+    public Integer InsertOwners(Owner owner) throws SQLException {
+        PreparedStatement statement = m_connection.GetConnection().prepareStatement(
+                "INSERT INTO AIRPORTS(CODE, CITY) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+
+        statement.setString(1, owner.GetShortname());
+        statement.setString(2, owner.GetFullname());
+
+        int rows = statement.executeUpdate();
+
+        if(rows == 0) {
+            throw new SQLException("Creating new owner failed, no rows affected");
+        }
+
+        try (ResultSet keys = statement.getGeneratedKeys()) {
+            if (keys.next()) {
+                return keys.getInt("owner_id");
+            } else {
+                throw new SQLException("Creating new owner failed, no owner_id obtained");
+            }
+        }
+    }
+    
+    public Integer UpdateOwners(Owner owner,
                                   Predicate<Integer> id,
                                   Predicate<String> Shortname,
                                   Predicate<String> Fullname) throws SQLException {
@@ -60,9 +93,9 @@ public class Owners {
         query += subquery1 + subquery2 + subquery3;
 
         PreparedStatement statement = m_connection.GetConnection().prepareStatement(query);
-        statement.setInt(1, Owner.GetId());
-        statement.setString(2, Owner.GetShortname());
-        statement.setString(3, Owner.GetFullname());
+        statement.setInt(1, owner.GetId());
+        statement.setString(2, owner.GetShortname());
+        statement.setString(3, owner.GetFullname());
 
         Integer result = statement.executeUpdate();
 
