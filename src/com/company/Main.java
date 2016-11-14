@@ -5,6 +5,14 @@ import com.company.Airport.Airports;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/*
+aircrafttypes   CRUD
+airship         CRUD
+employees ---   RUD
+flight          CRUD
+luggage --      RUD
+ */
+
 public class Main {
 
     public static void main(String[] args) {

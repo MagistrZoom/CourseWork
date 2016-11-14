@@ -23,12 +23,15 @@ public class Airports {
         private String m_city;
 
         public Airport(Integer airport_id, String code, String city) {
+            if (code.isEmpty() || city.isEmpty()) {
+                throw new IllegalArgumentException();
+            }
+
             m_airport_id = airport_id;
             m_code = code;
             m_city = city;
         }
 
-        /* Constructor is used for inserting new fields with given arguments */
         public Airport(String code, String city) {
             if (code.isEmpty() || city.isEmpty()) {
                 throw new IllegalArgumentException();
@@ -36,26 +39,39 @@ public class Airports {
 
             m_code = code;
             m_city = city;
-
-            String query = "";
         }
 
         public String GetCode() {
             return m_code;
         }
-
         public String GetCity() { return m_city; }
-
         public Integer GetID() { return m_airport_id; }
-
-        public boolean Delete() {
-            /*TODO: Implement deleting*/
-            return true;
-        }
     }
 
     public Airports(OracleConnection connection) {
         m_connection = connection;
+    }
+
+    public Integer InsertAirport(Airport airport) throws SQLException {
+        PreparedStatement statement = m_connection.GetConnection().prepareStatement(
+                "INSERT INTO AIRPORTS(CODE, CITY) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+
+        statement.setString(1, airport.GetCode());
+        statement.setString(2, airport.GetCity());
+
+        int rows = statement.executeUpdate();
+
+        if(rows == 0) {
+            throw new SQLException("Creating new airport failed, no rows affected");
+        }
+
+        try (ResultSet keys = statement.getGeneratedKeys()) {
+            if (keys.next()) {
+                return keys.getInt("airport_id");
+            } else {
+                throw new SQLException("Creating new airport failed, no airport_id obtained");
+            }
+        }
     }
 
     public Integer UpdateAirports(Airport airport,
