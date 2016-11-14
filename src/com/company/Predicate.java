@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 public abstract class Predicate <T> {
-    abstract public String GenerateSQL(String attribute, boolean is_first);
+    abstract public String SelectWhereStatement(String attribute, boolean is_first);
 
     protected String FormatParameter(Object parameter) {
         if (parameter == null) {

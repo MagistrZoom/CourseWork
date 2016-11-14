@@ -1,8 +1,8 @@
 package com.company.Airport;
 import com.company.OracleConnection;
 import com.company.Predicate;
-import com.company.PredicateList;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,12 +17,11 @@ import java.util.ArrayList;
 public class Airports {
     OracleConnection m_connection;
 
-    public class Airport {
+    public static class Airport {
         private Integer m_airport_id;
         private String m_code;
         private String m_city;
 
-        /* for private using only */
         public Airport(Integer airport_id, String code, String city) {
             m_airport_id = airport_id;
             m_code = code;
@@ -45,13 +44,9 @@ public class Airports {
             return m_code;
         }
 
-        public String GetCity() {
-            return m_city;
-        }
+        public String GetCity() { return m_city; }
 
-        public Integer GetID() {
-            return m_airport_id;
-        }
+        public Integer GetID() { return m_airport_id; }
 
         public boolean Delete() {
             /*TODO: Implement deleting*/
@@ -63,16 +58,48 @@ public class Airports {
         m_connection = connection;
     }
 
-    public ArrayList<Airport> GetAirports(Predicate<Integer> id,
-                                     Predicate<String> code,
-                                     Predicate<String> city) throws SQLException {
-        //FIXME: WHERE only if at least one of predicates exists
-        String query = "SELECT airport_id, code, city FROM airports ";
+    public Integer UpdateAirports(Airport airport,
+                                  Predicate<Integer> id,
+                                  Predicate<String> code,
+                                  Predicate<String> city) throws SQLException {
+        String query = "UPDATE airports SET airport_id = ?, code = ?, city = ? ";
+        String subquery1 = (id != null)?id.SelectWhereStatement("airport_id", true) + " ":"";
+        String subquery2 = (code != null)?code.SelectWhereStatement("code", false) + " ":"";
+        String subquery3 = (city != null)?city.SelectWhereStatement("city", false):"";
 
-        String subquery1 = id.GenerateSQL("airport_id", true) + " ";
-        String subquery2 = code.GenerateSQL("code", false) + " ";
-        String subquery3 = city.GenerateSQL("city", false);
-        //query += ";";
+        if (!subquery1.isEmpty() ||
+            !subquery2.isEmpty() ||
+            !subquery3.isEmpty()) {
+            query += "WHERE ";
+        }
+
+        query += subquery1 + subquery2 + subquery3;
+
+        PreparedStatement statement = m_connection.GetConnection().prepareStatement(query);
+        statement.setInt(1, airport.GetID());
+        statement.setString(2, airport.GetCode());
+        statement.setString(3, airport.GetCity());
+
+        Integer result = statement.executeUpdate();
+
+        return result;
+    }
+
+    public ArrayList<Airport> GetAirports(Predicate<Integer> id,
+                                          Predicate<String> code,
+                                          Predicate<String> city) throws SQLException {
+        String query = "SELECT airport_id, code, city FROM airports ";
+        String subquery1 = (id != null)?id.SelectWhereStatement("airport_id", true) + " ":"";
+        String subquery2 = (code != null)?code.SelectWhereStatement("code", false) + " ":"";
+        String subquery3 = (city != null)?city.SelectWhereStatement("city", false):"";
+
+        if (!subquery1.isEmpty() ||
+            !subquery2.isEmpty() ||
+            !subquery3.isEmpty()) {
+            query += "WHERE ";
+        }
+
+        query += subquery1 + subquery2 + subquery3;
 
         Statement statement = m_connection.GetConnection().createStatement();
         ResultSet result = statement.executeQuery(query);
@@ -81,12 +108,31 @@ public class Airports {
         while(result.next()) {
             airports.add(new Airport(result.getInt("airport_id"),
                                      result.getString("code"),
-                                      result.getString("city")));
+                                     result.getString("city")));
         }
 
         return airports;
     }
 
+    public void DeleteAirports(Predicate<Integer> id,
+                                  Predicate<String> code,
+                                  Predicate<String> city) throws SQLException {
+        String query = "DELETE FROM airport ";
+        String subquery1 = (id != null)?id.SelectWhereStatement("airport_id", true) + " ":"";
+        String subquery2 = (code != null)?code.SelectWhereStatement("code", false) + " ":"";
+        String subquery3 = (city != null)?city.SelectWhereStatement("city", false):"";
+
+        if (!subquery1.isEmpty() ||
+            !subquery2.isEmpty() ||
+            !subquery3.isEmpty()) {
+            query += "WHERE ";
+        }
+
+        query += subquery1 + subquery2 + subquery3;
+
+        Statement statement = m_connection.GetConnection().createStatement();
+        statement.executeQuery(query);
+    }
 
 
 }
