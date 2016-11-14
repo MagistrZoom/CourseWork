@@ -124,7 +124,7 @@ public class Flights {
         return result;
     }
 
-    public ArrayList<Flight> GetAirships(Predicate<Integer> flight_id,
+    public ArrayList<Flight> GetFlights(Predicate<Integer> flight_id,
                                          Predicate<Timestamp> departure,
                                          Predicate<Timestamp> arrival,
                                          Predicate<Integer> destination_point,
@@ -166,7 +166,7 @@ public class Flights {
         return flights;
     }
 
-    public void DeleteFlight(Predicate<Integer> flight_id,
+    public void DeleteFlights(Predicate<Integer> flight_id,
                              Predicate<Timestamp> departure,
                              Predicate<Timestamp> arrival,
                              Predicate<Integer> destination_point,

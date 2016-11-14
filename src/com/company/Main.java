@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 /*
 employees ---   RUD
-luggage --      RUD
  */
 
 public class Main {
