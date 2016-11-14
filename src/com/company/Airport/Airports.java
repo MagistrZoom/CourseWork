@@ -67,19 +67,19 @@ public class Airports {
                                      Predicate<String> code,
                                      Predicate<String> city) throws SQLException {
         //FIXME: WHERE only if at least one of predicates exists
-        String query = "SELECT airport_id, code, city FROM airports WHERE ";
+        String query = "SELECT airport_id, code, city FROM airports ";
 
-        query += id.GenerateSQL("airport_id", true) + " ";
-        query += code.GenerateSQL("code", false) + " ";
-        query += city.GenerateSQL("city", false);
-        query += ";";
+        String subquery1 = id.GenerateSQL("airport_id", true) + " ";
+        String subquery2 = code.GenerateSQL("code", false) + " ";
+        String subquery3 = city.GenerateSQL("city", false);
+        //query += ";";
 
         Statement statement = m_connection.GetConnection().createStatement();
         ResultSet result = statement.executeQuery(query);
 
         ArrayList<Airport> airports = new ArrayList<>();
         while(result.next()) {
-            airports.add(new Airport(result.getInt("id"),
+            airports.add(new Airport(result.getInt("airport_id"),
                                      result.getString("code"),
                                       result.getString("city")));
         }

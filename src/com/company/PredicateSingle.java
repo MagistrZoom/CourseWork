@@ -14,7 +14,7 @@ public class PredicateSingle <T> extends Predicate <T> {
     @Override
     public String GenerateSQL(String attribute, boolean is_first) {
         String query;
-        query = FormatParameter(attribute) +
+        query = attribute +
                 " " + GetStringOperation() +
                 " " + String.valueOf(m_value);
 

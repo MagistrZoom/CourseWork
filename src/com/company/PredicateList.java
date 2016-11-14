@@ -37,7 +37,7 @@ public class PredicateList<T> extends Predicate<T> {
                 !is_first) {
             query += GetStringOperation() + " ";
         }
-        query += FormatParameter(attribute) + " ";
+        query += attribute + " ";
         if (PredicateList.Operation.NOT == m_operation) {
             query += GetStringOperation() + " ";
         }
