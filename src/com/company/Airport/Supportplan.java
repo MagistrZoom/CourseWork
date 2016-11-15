@@ -1,9 +1,6 @@
 package com.company.Airport;
         import com.company.OracleConnection;
         import com.company.Predicate;
-        import com.sun.javafx.collections.SetAdapterChange;
-        import com.sun.xml.internal.fastinfoset.stax.events.StartDocumentEvent;
-        import oracle.jdbc.OracleTypes;
 
         import java.sql.*;
         import java.util.ArrayList;
