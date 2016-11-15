@@ -85,7 +85,7 @@ public class People_Flights {
 
         String subquery1 = (people_flight_id != null)?people_flight_id.SelectWhereStatement("people_flight_id", true) + " ":"";
         String subquery2 = (id != null)?id.SelectWhereStatement("id", false) + " ":"";
-        String subquery3 = (flight_id != null)?flight_id.SelectWhereStatement("flight_id", false) + " ":"";
+        String subquery3 = (flight_id != null)?flight_id.SelectWhereStatement("flight_id", false):"";
 
         if (!subquery1.isEmpty() ||
                 !subquery2.isEmpty() ||
@@ -110,12 +110,12 @@ public class People_Flights {
                                                       Predicate<Integer> flight_id
                                                           ) throws SQLException {
 
-        String query = "SELECT people_flight_id, id, flight_id, ,  FROM people_flight ";
+        String query = "SELECT people_flight_id, id, flight_id FROM people_flight ";
 
 
         String subquery1 = (people_flight_id != null)?people_flight_id.SelectWhereStatement("people_flight_id", true) + " ":"";
         String subquery2 = (id != null)?id.SelectWhereStatement("id", false) + " ":"";
-        String subquery3 = (flight_id != null)?flight_id.SelectWhereStatement("flight_id", false) + " ":"";
+        String subquery3 = (flight_id != null)?flight_id.SelectWhereStatement("flight_id", false):"";
 
         if (!subquery1.isEmpty() ||
                 !subquery2.isEmpty() ||
