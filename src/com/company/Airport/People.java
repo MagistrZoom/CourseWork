@@ -1,9 +1,15 @@
 package com.company.Airport;
 import com.company.OracleConnection;
 import com.company.Predicate;
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.OracleResultSet;
 import oracle.jdbc.OracleTypes;
+import oracle.jdbc.proxy.oracle$1jdbc$1replay$1driver$1NonTxnReplayableBase$2java$1sql$1SQLData$$$Proxy;
 import oracle.jpub.runtime.MutableStruct;
 import oracle.sql.*;
+
+import java.math.BigDecimal;
+import java.sql.SQLData;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,6 +18,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class People {
@@ -182,7 +190,7 @@ public class People {
                                     Predicate<String> firstname,
                                     Predicate<String> lastname,
                                     Predicate<Man.Passport> passport) throws SQLException {
-        String query = "SELECT id, firstname, lastname FROM people ";
+        String query = "SELECT id, firstname, lastname, PASSPORT FROM people ";
         String subquery1 = (id != null)?id.SelectWhereStatement("id", true) + " ":"";
         String subquery2 = (firstname != null)?firstname.SelectWhereStatement("firstname", false) + " ":"";
         String subquery3 = (lastname != null)?lastname.SelectWhereStatement("lastname", false):"";
@@ -198,16 +206,22 @@ public class People {
         query += subquery1 + subquery2 + subquery3 + subquery4;
 
         Statement statement = m_connection.GetConnection().createStatement();
-        ResultSet result = statement.executeQuery(query);
+        OracleResultSet result = (OracleResultSet) statement.executeQuery(query);
 
         ArrayList<Man> people = new ArrayList<>();
 
+        Struct pass;
+
         while(result.next()) {
+            pass = (Struct) result.getObject("passport");
+            Object[] trValues = pass.getAttributes();
+
             people.add(new Man(
                     result.getInt("id"),
                     result.getString("firstname"),
                     result.getString("lastname"),
-                    result.getObject("passport", Man.Passport.class)));
+                    new Man.Passport( ((BigDecimal) trValues[0]).intValue(), ((BigDecimal) trValues[1]).intValue())
+                    ));
         }
 
         return people;
@@ -217,7 +231,7 @@ public class People {
                              Predicate<String> firstname,
                              Predicate<String> lastname,
                              Predicate<Man.Passport> passport) throws SQLException {
-        String query = "DELETE FROM man ";
+        String query = "DELETE FROM PEOPLE ";
         String subquery1 = (id != null)?id.SelectWhereStatement("id", true) + " ":"";
         String subquery2 = (firstname != null)?firstname.SelectWhereStatement("firstname", false) + " ":"";
         String subquery3 = (lastname != null)?lastname.SelectWhereStatement("lastname", false):"";
