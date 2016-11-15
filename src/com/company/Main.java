@@ -3,6 +3,7 @@ package com.company;
 import com.company.Airport.People;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /*
 employees ---   RUD
@@ -26,8 +27,15 @@ public class Main {
 
             People.Man person = new People.Man("Working", "Insert", passportT);
 
-            people.InsertPeople(person);
+            //people.InsertPeople(person);
 
+
+            PredicateSingle<Integer> id1 = new PredicateSingle<>(
+                    PredicateSingle.Logic.OR,
+                    PredicateSingle.Operation.EQ, 21);
+            ArrayList<People.Man> personl =  people.GetPeople(id1, null, null, null);
+
+            people.DeletePeople(id1, null, null, null );
 /*
             PredicateList<String> codes = new PredicateList<>(PredicateList.Logic.OR, false, new ArrayList<>());
             codes.AddValue("KRO");
