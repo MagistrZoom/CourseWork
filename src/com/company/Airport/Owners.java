@@ -19,7 +19,7 @@ public class Owners {
         private String m_shortname;
         private String m_fullname;
         
-        public Integer GetId() {
+        public Integer GetOwner_id() {
             return m_owner_id;
         }
 
@@ -55,7 +55,7 @@ public class Owners {
 
     public Integer InsertOwners(Owner owner) throws SQLException {
         PreparedStatement statement = m_connection.GetConnection().prepareStatement(
-                "INSERT INTO AIRPORTS(CODE, CITY) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+                "INSERT INTO owners(shortname, fullname) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
 
         statement.setString(1, owner.GetShortname());
         statement.setString(2, owner.GetFullname());
@@ -76,11 +76,11 @@ public class Owners {
     }
     
     public Integer UpdateOwners(Owner owner,
-                                  Predicate<Integer> id,
+                                  Predicate<Integer> owner_id,
                                   Predicate<String> Shortname,
                                   Predicate<String> Fullname) throws SQLException {
         String query = "UPDATE owners SET owner_id = ?, shortname = ?, fullname = ? ";
-        String subquery1 = (id != null)?id.SelectWhereStatement("owner_id", true) + " ":"";
+        String subquery1 = (owner_id != null)?owner_id.SelectWhereStatement("owner_id", true) + " ":"";
         String subquery2 = (Shortname != null)?Shortname.SelectWhereStatement("shortname", false) + " ":"";
         String subquery3 = (Fullname != null)?Fullname.SelectWhereStatement("fullname", false):"";
 
@@ -93,7 +93,7 @@ public class Owners {
         query += subquery1 + subquery2 + subquery3;
 
         PreparedStatement statement = m_connection.GetConnection().prepareStatement(query);
-        statement.setInt(1, owner.GetId());
+        statement.setInt(1, owner.GetOwner_id());
         statement.setString(2, owner.GetShortname());
         statement.setString(3, owner.GetFullname());
 
@@ -102,11 +102,12 @@ public class Owners {
         return result;
     }
 
-    public ArrayList<Owner> GetOwners(Predicate<Integer> id,
+    public ArrayList<Owner> GetOwners(Predicate<Integer> owner_id,
                                           Predicate<String> shortname,
                                           Predicate<String> fullname) throws SQLException {
         String query = "SELECT owner_id, shortname, fullname FROM owners ";
-        String subquery1 = (id != null)?id.SelectWhereStatement("owner_id", true) + " ":"";
+
+        String subquery1 = (owner_id != null)?owner_id.SelectWhereStatement("owner_id", true) + " ":"";
         String subquery2 = (shortname != null)?shortname.SelectWhereStatement("shortname", false) + " ":"";
         String subquery3 = (fullname != null)?fullname.SelectWhereStatement("fullname", false):"";
 
@@ -131,11 +132,11 @@ public class Owners {
         return owners;
     }
 
-    public void DeleteOwners(Predicate<Integer> id,
+    public void DeleteOwners(Predicate<Integer> owner_id,
                                Predicate<String> shortname,
                                Predicate<String> fullname) throws SQLException {
-        String query = "DELETE FROM owner ";
-        String subquery1 = (id != null)?id.SelectWhereStatement("owner_id", true) + " ":"";
+        String query = "DELETE FROM owners ";
+        String subquery1 = (owner_id != null)?owner_id.SelectWhereStatement("owner_id", true) + " ":"";
         String subquery2 = (shortname != null)?shortname.SelectWhereStatement("shortname", false) + " ":"";
         String subquery3 = (fullname != null)?fullname.SelectWhereStatement("fullname", false):"";
 
