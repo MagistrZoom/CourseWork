@@ -1,13 +1,9 @@
 package com.company.Airport;
 import com.company.OracleConnection;
 import com.company.Predicate;
-import oracle.jdbc.OracleCallableStatement;
 import oracle.jdbc.OracleTypes;
-import oracle.jdbc.proxy.oracle$1jdbc$1replay$1driver$1NonTxnReplayableBase$2java$1sql$1SQLData$$$Proxy;
 import oracle.jpub.runtime.MutableStruct;
 import oracle.sql.*;
-
-import java.sql.SQLData;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,8 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Map;
-import java.util.Objects;
 
 
 public class People {
@@ -25,9 +19,7 @@ public class People {
 
     public static class Man {
 
-
-
-        public static class Passport_T implements CustomDatum, CustomDatumFactory {
+        public static class Passport implements CustomDatum, CustomDatumFactory {
             public static final String _SQL_NAME = "S191941.PASSPORT_T";
             public static final int _SQL_TYPECODE = OracleTypes.STRUCT;
 
@@ -37,17 +29,17 @@ public class People {
 
             static CustomDatumFactory[] _factory = new CustomDatumFactory[2];
 
-            static final Passport_T _Passport_TFactory = new Passport_T();
+            static final Passport __PASSPORT___FACTORY = new Passport();
             public static CustomDatumFactory getFactory()
             {
-                return _Passport_TFactory;
+                return __PASSPORT___FACTORY;
             }
 
-            private Passport_T() {
+            private Passport() {
                 _struct = new MutableStruct(new Object[2], _sqlType, _factory);
             }
 
-            public Passport_T(Integer series, Integer number) throws SQLException {
+            public Passport(Integer series, Integer number) throws SQLException {
                 _struct = new MutableStruct(new Object[2], _sqlType, _factory);
                 _struct.setAttribute(0, series);
                 _struct.setAttribute(1, number);
@@ -72,7 +64,7 @@ public class People {
             @Override
             public CustomDatum create(Datum datum, int i) throws SQLException {
                 if (datum == null) return null;
-                Passport_T o = new Passport_T();
+                Passport o = new Passport();
                 o._struct = new MutableStruct((STRUCT) datum, _sqlType, _factory);
                 return o;
             }
@@ -81,7 +73,7 @@ public class People {
         private Integer m_id;
         private String m_firstname;
         private String m_lastname;
-        private Passport_T m_passportT;
+        private Passport m_passportT;
 
 
         public Integer GetId() {
@@ -92,7 +84,7 @@ public class People {
             return m_firstname;
         }
 
-        public Passport_T GetPassport() {
+        public Passport GetPassport() {
             return m_passportT;
         }
 
@@ -100,7 +92,7 @@ public class People {
             return m_lastname;
         }
 
-        public Man(Integer id, String firstname, String lastname, Passport_T passportT) {
+        public Man(Integer id, String firstname, String lastname, Passport passportT) {
             if (firstname.isEmpty() || lastname.isEmpty() || passportT == null) {
                 throw new IllegalArgumentException();
             }
@@ -110,7 +102,7 @@ public class People {
             this.m_passportT = passportT;
         }
 
-        public Man(String firstname, String lastname, Passport_T passportT) {
+        public Man(String firstname, String lastname, Passport passportT) {
             if (firstname.isEmpty() || lastname.isEmpty() || passportT == null) {
                 throw new IllegalArgumentException();
             }
@@ -159,7 +151,7 @@ public class People {
                                 Predicate<Integer> id,
                                 Predicate<String> firstname,
                                 Predicate<String> lastname,
-                                Predicate<Man.Passport_T> passport) throws SQLException {
+                                Predicate<Man.Passport> passport) throws SQLException {
         String query = "UPDATE people SET id = ?, firstname = ?, lastname = ?, passport = ? ";
         String subquery1 = (id != null)?id.SelectWhereStatement("id", true) + " ":"";
         String subquery2 = (firstname != null)?firstname.SelectWhereStatement("firstname", false) + " ":"";
@@ -189,7 +181,7 @@ public class People {
     public ArrayList<Man> GetPeople(Predicate<Integer> id,
                                     Predicate<String> firstname,
                                     Predicate<String> lastname,
-                                    Predicate<Man.Passport_T> passport) throws SQLException {
+                                    Predicate<Man.Passport> passport) throws SQLException {
         String query = "SELECT id, firstname, lastname FROM people ";
         String subquery1 = (id != null)?id.SelectWhereStatement("id", true) + " ":"";
         String subquery2 = (firstname != null)?firstname.SelectWhereStatement("firstname", false) + " ":"";
@@ -215,7 +207,7 @@ public class People {
                     result.getInt("id"),
                     result.getString("firstname"),
                     result.getString("lastname"),
-                    result.getObject("passport", Man.Passport_T.class)));
+                    result.getObject("passport", Man.Passport.class)));
         }
 
         return people;
@@ -224,7 +216,7 @@ public class People {
     public void DeletePeople(Predicate<Integer> id,
                              Predicate<String> firstname,
                              Predicate<String> lastname,
-                             Predicate<Man.Passport_T> passport) throws SQLException {
+                             Predicate<Man.Passport> passport) throws SQLException {
         String query = "DELETE FROM man ";
         String subquery1 = (id != null)?id.SelectWhereStatement("id", true) + " ":"";
         String subquery2 = (firstname != null)?firstname.SelectWhereStatement("firstname", false) + " ":"";

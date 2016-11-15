@@ -1,11 +1,8 @@
 package com.company;
 
-import com.company.Airport.Airports;
 import com.company.Airport.People;
-import oracle.sql.NUMBER;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /*
 employees ---   RUD
@@ -25,7 +22,7 @@ public class Main {
                                                                 31);
             People people = new People(connection);
 
-            People.Man.Passport_T passportT = new People.Man.Passport_T(512, 666);
+            People.Man.Passport passportT = new People.Man.Passport(512, 666);
 
             People.Man person = new People.Man("Working", "Insert", passportT);
 
