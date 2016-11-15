@@ -16,21 +16,24 @@ public class People {
 
     public static class Man {
 
-        public class Passport{
-            private Integer m_series;
-            private Integer m_number;
+        public class Passport_T {
+            private Integer series;
+            private Integer numbr;
 
-            public Passport(Integer series, Integer number) {
-                this.m_series = series;
-                this.m_number = number;
+            public Passport_T(Integer series, Integer number) {
+                this.series = series;
+                this.numbr = number;
             }
 
-            public Integer getSeries(){
-                return m_series;
+            public Integer get_Series(){
+                return series;
             }
 
-            public Integer getNumber(){
-                return m_number;
+            public Integer get_Number(){
+                return numbr;
+            }
+            public Passport_T ECHO(){
+                return this;
             }
 
         }
@@ -38,7 +41,7 @@ public class People {
         private Integer m_id;
         private String m_firstname;
         private String m_lastname;
-        private Passport m_passport;
+        private Passport_T m_passportT;
 
 
         public Integer GetId() {
@@ -49,31 +52,31 @@ public class People {
             return m_firstname;
         }
 
-        public Passport GetPassport() {
-            return m_passport;
+        public Passport_T GetPassport() {
+            return m_passportT;
         }
 
         public String GetLastname() {
             return m_lastname;
         }
 
-        public Man(Integer id, String firstname, String lastname, Passport passport) {
-            if (firstname.isEmpty() || lastname.isEmpty() || passport == null) {
+        public Man(Integer id, String firstname, String lastname, Passport_T passportT) {
+            if (firstname.isEmpty() || lastname.isEmpty() || passportT == null) {
                 throw new IllegalArgumentException();
             }
             this.m_id = id;
             this.m_firstname = firstname;
             this.m_lastname = lastname;
-            this.m_passport = passport;
+            this.m_passportT = passportT;
         }
 
-        public Man(String firstname, String lastname, Passport passport) {
-            if (firstname.isEmpty() || lastname.isEmpty() || passport == null) {
+        public Man(String firstname, String lastname, Passport_T passportT) {
+            if (firstname.isEmpty() || lastname.isEmpty() || passportT == null) {
                 throw new IllegalArgumentException();
             }
             this.m_firstname = firstname;
             this.m_lastname = lastname;
-            this.m_passport = passport;
+            this.m_passportT = passportT;
         }
     }
 
@@ -101,7 +104,7 @@ public class People {
                                 Predicate<Integer> id,
                                 Predicate<String> firstname,
                                 Predicate<String> lastname,
-                                Predicate<Man.Passport> passport) throws SQLException {
+                                Predicate<Man.Passport_T> passport) throws SQLException {
         String query = "UPDATE people SET id = ?, firstname = ?, lastname = ?, passport = ? ";
         String subquery1 = (id != null)?id.SelectWhereStatement("id", true) + " ":"";
         String subquery2 = (firstname != null)?firstname.SelectWhereStatement("firstname", false) + " ":"";
@@ -131,7 +134,7 @@ public class People {
     public ArrayList<Man> GetPeople(Predicate<Integer> id,
                                     Predicate<String> firstname,
                                     Predicate<String> lastname,
-                                    Predicate<Man.Passport> passport) throws SQLException {
+                                    Predicate<Man.Passport_T> passport) throws SQLException {
         String query = "SELECT id, firstname, lastname FROM people ";
         String subquery1 = (id != null)?id.SelectWhereStatement("id", true) + " ":"";
         String subquery2 = (firstname != null)?firstname.SelectWhereStatement("firstname", false) + " ":"";
@@ -157,7 +160,7 @@ public class People {
                     result.getInt("id"),
                     result.getString("firstname"),
                     result.getString("lastname"),
-                    result.getObject("passport", Man.Passport.class)));
+                    result.getObject("passport", Man.Passport_T.class)));
         }
 
         return people;
@@ -166,7 +169,7 @@ public class People {
     public void DeletePeople(Predicate<Integer> id,
                              Predicate<String> firstname,
                              Predicate<String> lastname,
-                             Predicate<Man.Passport> passport) throws SQLException {
+                             Predicate<Man.Passport_T> passport) throws SQLException {
         String query = "DELETE FROM man ";
         String subquery1 = (id != null)?id.SelectWhereStatement("id", true) + " ":"";
         String subquery2 = (firstname != null)?firstname.SelectWhereStatement("firstname", false) + " ":"";
