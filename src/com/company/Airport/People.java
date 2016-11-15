@@ -225,7 +225,7 @@ public class People {
                              Predicate<String> firstname,
                              Predicate<String> lastname,
                              Predicate<Man.Passport_T> passport) throws SQLException {
-        String query = "DELETE FROM man ";
+        String query = "DELETE FROM PEOPLE ";
         String subquery1 = (id != null)?id.SelectWhereStatement("id", true) + " ":"";
         String subquery2 = (firstname != null)?firstname.SelectWhereStatement("firstname", false) + " ":"";
         String subquery3 = (lastname != null)?lastname.SelectWhereStatement("lastname", false):"";
