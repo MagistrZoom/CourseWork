@@ -1,6 +1,8 @@
 package com.company;
 
 import com.company.Airport.Airports;
+import com.company.Airport.People;
+import oracle.sql.NUMBER;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,12 +18,20 @@ public class Main {
         try {
             connection.SetConnection("localhost", 1521, "orbis", "S191941", "ooi602");
 
-            Airports airports = new Airports(connection);
+            //Airports airports = new Airports(connection);
 
             PredicateSingle<Integer> id = new PredicateSingle<>(PredicateSingle.Logic.OR,
                                                                 PredicateSingle.Operation.EQ,
                                                                 31);
+            People people = new People(connection);
 
+            People.Man.Passport_T passportT = new People.Man.Passport_T(new NUMBER(512), new NUMBER(666));
+
+            People.Man person = new People.Man("Working", "Insert", passportT);
+
+            people.InsertPeople(person);
+
+/*
             PredicateList<String> codes = new PredicateList<>(PredicateList.Logic.OR, false, new ArrayList<>());
             codes.AddValue("KRO");
             codes.AddValue("VKO");
@@ -38,7 +48,7 @@ public class Main {
 
             air = airports.GetAirports(id, codes, cities);
             air.forEach((a) -> System.out.println(a.GetAircraftID() + " " + a.GetCity() + " " + a.GetCode()));
-        } catch (ClassNotFoundException e) {
+*/        } catch (ClassNotFoundException e) {
             System.err.println(e.getMessage());
         } catch (SQLException e) {
             System.err.println(e.getSQLState());

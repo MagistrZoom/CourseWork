@@ -19,12 +19,12 @@ public class Employees extends People {
         public Employee (Integer man_id,
                          String firstname,
                          String lastname,
-                         Passport passport,
+                         Passport_T passportT,
                          String position,
                          Date recruitment,
                          Date dismissal,
                          Blob photo) {
-            super(man_id, firstname, lastname, passport);
+            super(man_id, firstname, lastname, passportT);
 
             m_position = position;
             m_recruitment = recruitment;
@@ -34,12 +34,12 @@ public class Employees extends People {
 
         public Employee (String firstname,
                          String lastname,
-                         Passport passport,
+                         Passport_T passportT,
                          String position,
                          Date recruitment,
                          Date dismissal,
                          Blob photo) {
-            this(-1, firstname, lastname, passport, position, recruitment,
+            this(-1, firstname, lastname, passportT, position, recruitment,
                     dismissal, photo);
         }
     }
@@ -78,7 +78,7 @@ public class Employees extends People {
                                 Predicate<Integer> id,
                                 Predicate<String> firstname,
                                 Predicate<String> lastname,
-                                Predicate<Man.Passport> passport) throws SQLException {
+                                Predicate<Man.Passport_T> passport) throws SQLException {
         String query = "UPDATE people SET man_id = ?, firstname = ?, lastname = ?, passport = ? ";
         String subquery1 = (id != null)?id.SelectWhereStatement("man_id", true) + " ":"";
         String subquery2 = (firstname != null)?firstname.SelectWhereStatement("firstname", false) + " ":"";
@@ -95,9 +95,9 @@ public class Employees extends People {
         query += subquery1 + subquery2 + subquery3 + subquery4;
 
         PreparedStatement statement = m_connection.GetConnection().prepareStatement(query);
-        statement.setInt(1, man.GetId());
-        statement.setString(2, man.GetFirstname());
-        statement.setString(3, man.GetLastname());
+        //statement.setInt(1, man.GetId());
+        //statement.setString(2, man.GetFirstname());
+        //statement.setString(3, man.GetLastname());
         //statement.setString(4, man.GetPassport());
 
         Integer result = statement.executeUpdate();
@@ -108,7 +108,7 @@ public class Employees extends People {
     public ArrayList<Man> GetPeople(Predicate<Integer> id,
                                     Predicate<String> firstname,
                                     Predicate<String> lastname,
-                                    Predicate<Man.Passport> passport) throws SQLException {
+                                    Predicate<Man.Passport_T> passport) throws SQLException {
         String query = "SELECT man_id, firstname, lastname FROM people ";
         String subquery1 = (id != null)?id.SelectWhereStatement("man_id", true) + " ":"";
         String subquery2 = (firstname != null)?firstname.SelectWhereStatement("firstname", false) + " ":"";
@@ -144,7 +144,7 @@ public class Employees extends People {
     public void DeletePeople(Predicate<Integer> id,
                              Predicate<String> firstname,
                              Predicate<String> lastname,
-                             Predicate<Man.Passport> passport) throws SQLException {
+                             Predicate<Man.Passport_T> passport) throws SQLException {
         String query = "DELETE FROM man ";
         String subquery1 = (id != null)?id.SelectWhereStatement("man_id", true) + " ":"";
         String subquery2 = (firstname != null)?firstname.SelectWhereStatement("firstname", false) + " ":"";

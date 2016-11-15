@@ -1,6 +1,10 @@
 package com.company.Airport;
 import com.company.OracleConnection;
 import com.company.Predicate;
+import oracle.jdbc.proxy.oracle$1jdbc$1replay$1driver$1NonTxnReplayableBase$2java$1sql$1SQLData$$$Proxy;
+import oracle.sql.*;
+
+import java.sql.SQLData;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class People {
@@ -16,26 +22,42 @@ public class People {
 
     public static class Man {
 
-        public class Passport_T {
-            private Integer series;
-            private Integer numbr;
+        public static class Passport_T implements ORAData, ORADataFactory {
+            private NUMBER series;
+            private NUMBER number;
 
-            public Passport_T(Integer series, Integer number) {
+            public Passport_T(NUMBER series, NUMBER number) {
                 this.series = series;
-                this.numbr = number;
+                this.number = number;
             }
 
-            public Integer get_Series(){
+            public NUMBER get_Series(){
                 return series;
             }
 
-            public Integer get_Number(){
-                return numbr;
+            public NUMBER get_Number(){
+                return number;
             }
             public Passport_T ECHO(){
                 return this;
             }
 
+            @Override
+            public Datum toDatum(Connection c) throws SQLException {
+                StructDescriptor sd =
+                        StructDescriptor.createDescriptor("PASSPORT_T", c);
+                Object [] attributes = { series, number};
+                return new STRUCT(sd, c, attributes);
+            }
+
+            @Override
+            public ORAData create(Datum d, int i) throws SQLException {
+                if (d == null) return null;
+                Object [] attributes = ((STRUCT) d).getOracleAttributes();
+                return new Passport_T(
+                        (NUMBER) attributes[0],
+                        (NUMBER) attributes[1]);
+            }
         }
 
         private Integer m_id;
@@ -85,14 +107,27 @@ public class People {
     }
 
     public Integer InsertPeople(Man man) throws SQLException {
-        CallableStatement proc = m_connection.GetConnection().
+
+
+        /*
+        StructDescriptor structDesc =
+                StructDescriptor.createDescriptor("PASSPORT_T", m_connection.GetConnection());
+        Object[] itemAtributes = new Object[] {new Integer(1), new Integer(222)};
+        STRUCT itemObject1 = new STRUCT(structDesc,m_connection.GetConnection(),itemAtributes);
+        Object ob1 = itemObject1;
+        */
+        Connection con = m_connection.GetConnection();
+
+        CallableStatement proc = con.
                 prepareCall("{ ? = call AIRPORT.ADD_PEOPLE(?,?,?) }");
 
-        proc.registerOutParameter(1, Types.INTEGER);
+        proc.registerOutParameter("ret_Pe_id", Types.INTEGER);
 
-        proc.setString(1, man.GetFirstname());
-        proc.setString(2, man.GetLastname());
-        proc.setObject(3, man.GetPassport());
+        proc.setString("fname", man.GetFirstname());
+        proc.setString("lname", man.GetLastname());
+         
+        proc.setObject("pass", man.GetPassport().create(
+                man.GetPassport().toDatum(m_connection.GetConnection()), 1), );
 
         proc.execute();
         int result = proc.getInt(1);
