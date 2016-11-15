@@ -25,7 +25,7 @@ public class Main {
                                                                 31);
             People people = new People(connection);
 
-            People.Man.Passport_T passportT = new People.Man.Passport_T(new NUMBER(512), new NUMBER(666));
+            People.Man.Passport_T passportT = new People.Man.Passport_T(512, 666);
 
             People.Man person = new People.Man("Working", "Insert", passportT);
 

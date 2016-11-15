@@ -1,7 +1,10 @@
 package com.company.Airport;
 import com.company.OracleConnection;
 import com.company.Predicate;
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.OracleTypes;
 import oracle.jdbc.proxy.oracle$1jdbc$1replay$1driver$1NonTxnReplayableBase$2java$1sql$1SQLData$$$Proxy;
+import oracle.jpub.runtime.MutableStruct;
 import oracle.sql.*;
 
 import java.sql.SQLData;
@@ -22,41 +25,56 @@ public class People {
 
     public static class Man {
 
-        public static class Passport_T implements ORAData, ORADataFactory {
-            private NUMBER series;
-            private NUMBER number;
 
-            public Passport_T(NUMBER series, NUMBER number) {
-                this.series = series;
-                this.number = number;
+
+        public static class Passport_T implements CustomDatum, CustomDatumFactory {
+            public static final String _SQL_NAME = "S191941.PASSPORT_T";
+            public static final int _SQL_TYPECODE = OracleTypes.STRUCT;
+
+            MutableStruct _struct;
+
+            static int[] _sqlType = { Types.INTEGER, Types.INTEGER };
+
+            static CustomDatumFactory[] _factory = new CustomDatumFactory[2];
+
+            static final Passport_T _Passport_TFactory = new Passport_T();
+            public static CustomDatumFactory getFactory()
+            {
+                return _Passport_TFactory;
             }
 
-            public NUMBER get_Series(){
-                return series;
+            private Passport_T() {
+                _struct = new MutableStruct(new Object[2], _sqlType, _factory);
             }
 
-            public NUMBER get_Number(){
-                return number;
+            public Passport_T(Integer series, Integer number) throws SQLException {
+                _struct = new MutableStruct(new Object[2], _sqlType, _factory);
+                _struct.setAttribute(0, series);
+                _struct.setAttribute(1, number);
             }
-            public Passport_T ECHO(){
-                return this;
+
+            public Integer GetSeries() throws SQLException {
+                return (Integer) _struct.getAttribute(0);
+            }
+
+            public Integer GetNumber() throws SQLException {
+                return (Integer) _struct.getAttribute(1);
+            }
+            public void ECHO(){
+                return;
             }
 
             @Override
-            public Datum toDatum(Connection c) throws SQLException {
-                StructDescriptor sd =
-                        StructDescriptor.createDescriptor("PASSPORT_T", c);
-                Object [] attributes = { series, number};
-                return new STRUCT(sd, c, attributes);
+            public Datum toDatum(oracle.jdbc.driver.OracleConnection oracleConnection) throws SQLException {
+                return _struct.toDatum(oracleConnection, _SQL_NAME);
             }
 
             @Override
-            public ORAData create(Datum d, int i) throws SQLException {
-                if (d == null) return null;
-                Object [] attributes = ((STRUCT) d).getOracleAttributes();
-                return new Passport_T(
-                        (NUMBER) attributes[0],
-                        (NUMBER) attributes[1]);
+            public CustomDatum create(Datum datum, int i) throws SQLException {
+                if (datum == null) return null;
+                Passport_T o = new Passport_T();
+                o._struct = new MutableStruct((STRUCT) datum, _sqlType, _factory);
+                return o;
             }
         }
 
@@ -121,13 +139,15 @@ public class People {
         CallableStatement proc = con.
                 prepareCall("{ ? = call AIRPORT.ADD_PEOPLE(?,?,?) }");
 
-        proc.registerOutParameter("ret_Pe_id", Types.INTEGER);
+        proc.registerOutParameter(1, Types.INTEGER);
 
-        proc.setString("fname", man.GetFirstname());
-        proc.setString("lname", man.GetLastname());
-         
-        proc.setObject("pass", man.GetPassport().create(
-                man.GetPassport().toDatum(m_connection.GetConnection()), 1), );
+        proc.setString(2, man.GetFirstname());
+        proc.setString(3, man.GetLastname());
+
+        proc.setObject(4, man.GetPassport(), OracleTypes.STRUCT);
+
+        //proc.setObject("pass", man.GetPassport().create(
+        //        man.GetPassport().toDatum(m_connection.GetConnection()), 1), );
 
         proc.execute();
         int result = proc.getInt(1);

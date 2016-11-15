@@ -1,6 +1,13 @@
 package com.company;
 
+import com.company.Airport.People;
+
 import java.sql.*;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.lang.Class.forName;
 
 public class OracleConnection {
     Connection m_connection;
@@ -14,7 +21,7 @@ public class OracleConnection {
 
         System.err.println("-------- Oracle JDBC Connection Testing ------");
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            forName("oracle.jdbc.driver.OracleDriver");
         } catch (ClassNotFoundException e) {
             System.err.println("Where is your Oracle JDBC Driver?");
             e.printStackTrace();
@@ -23,6 +30,7 @@ public class OracleConnection {
 
         System.err.println("Oracle JDBC Driver Registered!");
         try {
+            DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
             m_connection = DriverManager.getConnection(
                     "jdbc:oracle:thin:@//" + host +
                     ":" + String.valueOf(port) +
