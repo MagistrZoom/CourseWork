@@ -156,7 +156,7 @@ public class Airships {
         return airships;
     }
 
-    public void DeleteAirports(Predicate<Integer> id,
+    public void DeleteAirships(Predicate<Integer> id,
                                Predicate<Integer> aircrafttype_id,
                                Predicate<String> manufacturer,
                                Predicate<String> serialnumber,

@@ -40,7 +40,7 @@ public class Airports {
             return m_code;
         }
         public String GetCity() { return m_city; }
-        public Integer GetAircraftID() { return m_airport_id; }
+        public Integer GetAirportID() { return m_airport_id; }
     }
 
     public Airports(OracleConnection connection) {
@@ -87,7 +87,7 @@ public class Airports {
         query += subquery1 + subquery2 + subquery3;
 
         PreparedStatement statement = m_connection.GetConnection().prepareStatement(query);
-        statement.setInt(1, airport.GetAircraftID());
+        statement.setInt(1, airport.GetAirportID());
         statement.setString(2, airport.GetCode());
         statement.setString(3, airport.GetCity());
 

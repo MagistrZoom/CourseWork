@@ -124,7 +124,7 @@ public class Employees extends People {
                                   Predicate<Date> dismissal) throws SQLException {
         ArrayList<Man> people = super.GetPeople(id, firstname, lastname, passport);
 
-        String query = "SELECT FROM EMPLOYEES ";
+        String query = "SELECT * FROM EMPLOYEES ";
         String subquery1 = (employee_id != null)?employee_id.SelectWhereStatement("employee_id", true) + " ":"";
         String subquery2 = (position != null)?position.SelectWhereStatement("position", false) + " ":"";
         String subquery3 = (photo != null)?photo.SelectWhereStatement("photo", false):"";

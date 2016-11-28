@@ -25,7 +25,7 @@ public class PredicateSingle <T> extends Predicate <T> {
 
         query += attribute +
                 " " + GetStringOperation() +
-                " " + String.valueOf(m_value);
+                " " + FormatParameter(String.valueOf(m_value));
 
         return query;
     }

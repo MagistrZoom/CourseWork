@@ -126,14 +126,6 @@ public class People {
 
     public Integer InsertPeople(Man man) throws SQLException {
 
-
-        /*
-        StructDescriptor structDesc =
-                StructDescriptor.createDescriptor("PASSPORT_T", m_connection.GetConnection());
-        Object[] itemAtributes = new Object[] {new Integer(1), new Integer(222)};
-        STRUCT itemObject1 = new STRUCT(structDesc,m_connection.GetConnection(),itemAtributes);
-        Object ob1 = itemObject1;
-        */
         Connection con = m_connection.GetConnection();
 
         CallableStatement proc = con.
